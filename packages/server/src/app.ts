@@ -13,9 +13,6 @@ import { MONGODB_URI, SESSION_SECRET } from './util/secrets';
 const MongoStore = mongo(session);
 
 // Controllers (route handlers)
-import * as homeController from './controllers/home';
-import * as contactController from './controllers/contact';
-
 import authController from './controllers/user';
 import formController from './controllers/form';
 
@@ -89,25 +86,7 @@ app.use(
 /**
  * Primary app routes.
  */
-app.get('/', homeController.index);
 app.use('/api/auth', authController);
 app.use('/api/form', formController);
-app.get('/contact', contactController.getContact);
-app.post('/contact', contactController.postContact);
-
-/**
- * OAuth authentication routes. (Sign in)
- */
-app.get(
-  '/auth/facebook',
-  passport.authenticate('facebook', { scope: ['email', 'public_profile'] })
-);
-app.get(
-  '/auth/facebook/callback',
-  passport.authenticate('facebook', { failureRedirect: '/login' }),
-  (req, res) => {
-    res.redirect(req.session.returnTo || '/');
-  }
-);
 
 export default app;

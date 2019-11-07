@@ -8,11 +8,11 @@ import { IVerifyOptions } from 'passport-local';
 import { WriteError } from 'mongodb';
 import { check, sanitize, validationResult } from 'express-validator';
 import '../config/passport';
+import { Form } from '../models/Form';
 
 const router = express.Router();
 
-router.get('/test', (req: Request, res: Response) => {
-  console.log('HEy', req.isAuthenticated());
+router.get('/is-logged', async (req: Request, res: Response) => {
   if (req.isAuthenticated()) {
     return res.status(200).json({ message: 'Logged in!' });
   }

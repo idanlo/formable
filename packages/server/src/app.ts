@@ -14,14 +14,10 @@ const MongoStore = mongo(session);
 
 // Controllers (route handlers)
 import * as homeController from './controllers/home';
-import * as apiController from './controllers/api';
 import * as contactController from './controllers/contact';
 
-import auth from './controllers/user';
-
-// API keys and Passport configuration
-import * as passportConfig from './config/passport';
-import { check } from 'express-validator';
+import authController from './controllers/user';
+import formController from './controllers/form';
 
 // Create Express server
 const app = express();
@@ -94,20 +90,10 @@ app.use(
  * Primary app routes.
  */
 app.get('/', homeController.index);
-app.use('/api/auth', auth);
+app.use('/api/auth', authController);
+app.use('/api/form', formController);
 app.get('/contact', contactController.getContact);
 app.post('/contact', contactController.postContact);
-
-/**
- * API examples routes.
- */
-app.get('/api', apiController.getApi);
-app.get(
-  '/api/facebook',
-  passportConfig.isAuthenticated,
-  passportConfig.isAuthorized,
-  apiController.getFacebook
-);
 
 /**
  * OAuth authentication routes. (Sign in)

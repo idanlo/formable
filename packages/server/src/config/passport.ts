@@ -1,11 +1,11 @@
-import passport from "passport";
-import passportLocal from "passport-local";
-import passportFacebook from "passport-facebook";
-import _ from "lodash";
+import passport from 'passport';
+import passportLocal from 'passport-local';
+import passportFacebook from 'passport-facebook';
+import _ from 'lodash';
 
 // import { User, UserType } from '../models/User';
-import { User, UserDocument } from "../models/User";
-import { Request, Response, NextFunction } from "express";
+import { User, UserDocument } from '../models/User';
+import { Request, Response, NextFunction } from 'express';
 
 const LocalStrategy = passportLocal.Strategy;
 const FacebookStrategy = passportFacebook.Strategy;
@@ -24,7 +24,7 @@ passport.deserializeUser((id, done) => {
  * Sign in using Email and Password.
  */
 passport.use(
-  new LocalStrategy({ usernameField: "email" }, (email, password, done) => {
+  new LocalStrategy({ usernameField: 'email' }, (email, password, done) => {
     User.findOne({ email: email.toLowerCase() }, (err, user: any) => {
       if (err) {
         return done(err);
@@ -40,7 +40,7 @@ passport.use(
           return done(undefined, user);
         }
         return done(undefined, false, {
-          message: "Invalid email or password."
+          message: 'Invalid email or password.'
         });
       });
     });
@@ -133,7 +133,7 @@ export const isAuthenticated = (
   if (req.isAuthenticated()) {
     return next();
   }
-  res.redirect("/login");
+  res.status(404).json({ message: 'Not logged in!' });
 };
 
 /**
@@ -144,7 +144,7 @@ export const isAuthorized = (
   res: Response,
   next: NextFunction
 ) => {
-  const provider = req.path.split("/").slice(-1)[0];
+  const provider = req.path.split('/').slice(-1)[0];
 
   const user = req.user as UserDocument;
   if (_.find(user.tokens, { kind: provider })) {

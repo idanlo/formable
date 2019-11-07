@@ -1,0 +1,12 @@
+{
+  "private": true,
+  "name": "formable",
+  "version": "1.0.0",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "start:server": "cd packages/server && yarn watch",
+    "start:client": "cd packages/client && yarn start"
+  }
+}

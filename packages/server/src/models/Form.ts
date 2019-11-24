@@ -4,7 +4,8 @@ import { Form as FormDocument } from '@formable/shared';
 const fieldTypeQuestionSchema = new mongoose.Schema(
   {
     title: String,
-    description: String
+    description: String,
+    placeholder: String
   },
   { _id: false }
 );
@@ -34,7 +35,8 @@ const formSchema = new mongoose.Schema(
   {
     title: { required: true, type: String },
     description: String,
-    fields: [fieldSchema]
+    fields: [fieldSchema],
+    owner: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
   },
   { timestamps: true }
 );

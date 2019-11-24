@@ -25,7 +25,6 @@
     "watch-debug": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"yarn run watch-ts\" \"yarn run serve-debug\""
   },
   "dependencies": {
-    "@formable/shared": "1.0.0",
     "async": "^3.1.0",
     "bcrypt-nodejs": "^0.0.3",
     "bluebird": "^3.5.5",

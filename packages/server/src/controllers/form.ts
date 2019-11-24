@@ -10,6 +10,7 @@ const router = express.Router();
 router.post('/create', isAuthenticated, async (req: Request, res: Response) => {
   try {
     const form = req.body as FormType;
+    form.owner = req.user._id;
     const newForm = new Form(form);
     await newForm.save();
     return res.status(200).json(newForm);

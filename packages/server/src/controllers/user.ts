@@ -11,7 +11,7 @@ import '../config/passport';
 
 const router = express.Router();
 
-router.get('/is-logged', async (req: Request, res: Response) => {
+router.get('/is-logged', (req: Request, res: Response) => {
   if (req.isAuthenticated()) {
     return res.status(200).json({ message: 'Logged in!' });
   }
@@ -34,7 +34,6 @@ router.post(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-
     passport.authenticate(
       'local',
       (err: Error, user: UserDocument, info: IVerifyOptions) => {
@@ -44,6 +43,7 @@ router.post(
         if (!user) {
           return res.status(400).json({ message: info.message });
         }
+
         req.logIn(user, err => {
           if (err) {
             return res.status(400).json({ err });

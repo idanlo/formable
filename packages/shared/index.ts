@@ -46,7 +46,33 @@ export type FieldTypeQuestion = {
   };
 };
 
-export type FormField = FieldTypeRadio | FieldTypeQuestion;
+export type FieldTypeRating = {
+  type: 'rating';
+  rating: {
+    title: string;
+    allowHalfStar: boolean;
+  };
+};
+
+export type FieldTypeDate = {
+  type: 'date';
+  date: {
+    title: string;
+    type: 'date' | 'range' | 'month';
+  };
+};
+
+export type FieldTypeQuestionAnswer = FieldTypeQuestion & {
+  question: {
+    value: string;
+  };
+};
+
+export type FormField =
+  | FieldTypeRadio
+  | FieldTypeQuestion
+  | FieldTypeRating
+  | FieldTypeDate;
 
 export interface Form {
   title: string;

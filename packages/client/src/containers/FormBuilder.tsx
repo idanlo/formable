@@ -1,13 +1,12 @@
-/* tslint-disable */
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 import {
   DragDropContext,
   Droppable,
   Draggable,
   DropResult,
   DraggableLocation
-} from "react-beautiful-dnd";
+} from 'react-beautiful-dnd';
 import {
   List,
   Divider,
@@ -16,10 +15,13 @@ import {
   Radio,
   Button,
   Rate,
-  Checkbox
-} from "antd";
-import cloneDeep from "lodash.clonedeep";
-import { FormField } from "@formable/shared";
+  Checkbox,
+  Icon,
+  DatePicker,
+  Select
+} from 'antd';
+import cloneDeep from 'lodash.clonedeep';
+import { FormField } from '@formable/shared';
 
 // a little function to help us with reordering the result
 const reorder = (list: any[], startIndex: number, endIndex: number) => {
@@ -39,80 +41,79 @@ const copy = (
   droppableSource: DraggableLocation,
   droppableDestination: DraggableLocation
 ) => {
-  console.log("copy");
   const sourceClone = cloneDeep(source);
   const destClone = cloneDeep(destination);
   const item = sourceClone[droppableSource.index];
-  console.log("itemo", item);
+  console.log('item', item);
 
-  const newItem = {
+  const newItem: any = {
     type: item.value,
     question:
-      item.value === "question"
+      item.value === 'question'
         ? {
-            title: "Question",
-            description: "Description"
+            title: 'Question',
+            description: 'Description'
           }
         : undefined,
     radio:
-      item.value === "radio"
+      item.value === 'radio'
         ? {
-            title: "Radio",
+            title: 'Radio',
             options: []
           }
-        : null,
+        : undefined,
     rating:
-      item.value === "rating"
+      item.value === 'rating'
         ? {
-            title: "Rating",
+            title: 'Rating',
             allowHalfStar: true
           }
-        : null,
-    link:
-      item.value === "link"
+        : undefined,
+    date:
+      item.value === 'date'
         ? {
-            title: "Website"
+            title: 'Date',
+            type: 'date'
           }
-        : null
+        : undefined
   };
 
   destClone.splice(droppableDestination.index, 0, { ...newItem });
   return destClone;
 };
 
-const move = (
-  source: any,
-  destination: any,
-  droppableSource: any,
-  droppableDestination: any
-) => {
-  const sourceClone = Array.from(source);
-  const destClone = Array.from(destination);
-  const [removed] = sourceClone.splice(droppableSource.index, 1);
+// const move = (
+//   source: any,
+//   destination: any,
+//   droppableSource: any,
+//   droppableDestination: any
+// ) => {
+//   const sourceClone = Array.from(source);
+//   const destClone = Array.from(destination);
+//   const [removed] = sourceClone.splice(droppableSource.index, 1);
 
-  destClone.splice(droppableDestination.index, 0, removed);
+//   destClone.splice(droppableDestination.index, 0, removed);
 
-  const result: any = {};
-  result[droppableSource.droppableId] = sourceClone;
-  result[droppableDestination.droppableId] = destClone;
+//   const result: any = {};
+//   result[droppableSource.droppableId] = sourceClone;
+//   result[droppableDestination.droppableId] = destClone;
 
-  return result;
-};
+//   return result;
+// };
 
 const toolbarItems = [
-  { value: "question", label: "Paragraph text" },
-  { value: "radio", label: "Multi choice" },
-  { value: "number", label: "Number field" },
-  { value: "separator", label: "separator" },
-  { value: "rating", label: "Rating scale" },
-  { value: "yesno", label: "Yes / No" },
-  { value: "file", label: "File upload" },
-  { value: "date", label: "Date" },
-  { value: "separator", label: "separator" },
-  { value: "phone", label: "Phone number" },
-  { value: "email", label: "Email address" },
-  { value: "link", label: "Website" },
-  { value: "country", label: "Country" }
+  { value: 'question', label: 'Paragraph text', icon: 'file-text' },
+  { value: 'radio', label: 'Multi choice', icon: 'check-circle' },
+  { value: 'number', label: 'Number field', icon: 'number' },
+  { value: 'separator', label: 'separator' },
+  { value: 'rating', label: 'Rating scale', icon: 'star' },
+  { value: 'file', label: 'File upload', icon: 'file' },
+  { value: 'date', label: 'Date', icon: 'calendar' },
+  { value: 'separator', label: 'separator' },
+  { value: 'phone', label: 'Phone number', icon: 'phone' },
+  { value: 'email', label: 'Email address', icon: 'mail' },
+  { value: 'link', label: 'Website', icon: 'link' },
+  { value: 'country', label: 'Country', icon: 'flag' }
 ];
 
 const Container = styled.div`
@@ -141,12 +142,14 @@ const Toolbar = styled(Column)`
 
 const Form = styled(Column)`
   flex: 0.55;
-  padding: 0 20px;
 `;
 
 const FieldWrapper = styled.div<{ isSelected: boolean }>`
-  background: ${({ isSelected }) => (isSelected ? "#ccc" : "")};
-  transition: background 0.2s;
+  border-left: 0px solid #4c75ec;
+  border-left-width: ${({ isSelected }) => (isSelected ? '4px' : '')};
+  border-radius: 3px;
+  transition: border-left-width 0.2s;
+  padding: 10px 20px;
 `;
 
 const Helper = styled(Column)`
@@ -160,9 +163,16 @@ const Helper = styled(Column)`
 const ToolbarItem = styled(List.Item)`
   cursor: pointer;
   width: 100%;
+  padding: 0;
   transition: background 0.2s;
   transform: ${(props: { isDragging: boolean }) =>
-    !props.isDragging ? "none !important" : ""};
+    !props.isDragging ? 'none !important' : ''};
+
+  && {
+    display: flex;
+    flex: 1;
+    align-items: center;
+  }
 
   &:hover {
     background: #eee;
@@ -174,13 +184,13 @@ const Clone = styled(ToolbarItem)`
 `;
 
 type FieldEditorProps = {
-  field: any;
+  field: FormField;
   onEdit: (field: any) => any;
 };
 
 const FieldEditor: React.FC<FieldEditorProps> = ({ field, onEdit }) => {
   switch (field.type) {
-    case "question":
+    case 'question':
       return (
         <div>
           <p>Edit question title</p>
@@ -215,7 +225,7 @@ const FieldEditor: React.FC<FieldEditorProps> = ({ field, onEdit }) => {
           />
         </div>
       );
-    case "radio":
+    case 'radio':
       return (
         <div>
           <p>Edit radio title</p>
@@ -252,7 +262,7 @@ const FieldEditor: React.FC<FieldEditorProps> = ({ field, onEdit }) => {
           </form>
         </div>
       );
-    case "rating":
+    case 'rating':
       return (
         <div>
           <p>Edit rating title</p>
@@ -276,20 +286,34 @@ const FieldEditor: React.FC<FieldEditorProps> = ({ field, onEdit }) => {
           />
         </div>
       );
-    case "link":
+
+    case 'date':
       return (
         <div>
-          <p>Edit link title</p>
+          <p>Edit title</p>
           <Input
             type="text"
-            placeholder="Link title"
-            value={field.link.title}
             onChange={e => {
               const editable = cloneDeep(field);
-              editable.link.title = e.target.value;
+              editable.date.title = e.target.value;
               onEdit(editable);
             }}
+            value={field.date.title}
           />
+
+          <p>Edit date picker type</p>
+          <Select
+            defaultValue="date"
+            onChange={(val: 'date' | 'range' | 'month') => {
+              const editable = cloneDeep(field);
+              editable.date.type = val;
+              onEdit(editable);
+            }}
+          >
+            <Select.Option value="date">Date</Select.Option>
+            <Select.Option value="range">Range</Select.Option>
+            <Select.Option value="month">Month</Select.Option>
+          </Select>
         </div>
       );
     default:
@@ -298,14 +322,14 @@ const FieldEditor: React.FC<FieldEditorProps> = ({ field, onEdit }) => {
 };
 
 type FieldProps = {
-  field: any;
+  field: FormField;
   isSelected: boolean;
   select: () => void;
 };
 
 const Field: React.FC<FieldProps> = ({ field, isSelected, select }) => {
   switch (field.type) {
-    case "question":
+    case 'question':
       return (
         <FieldWrapper onClick={select} isSelected={isSelected}>
           <h1>{field.question.title}</h1>
@@ -313,7 +337,7 @@ const Field: React.FC<FieldProps> = ({ field, isSelected, select }) => {
           <Input type="text" placeholder={field.question.placeholder} />
         </FieldWrapper>
       );
-    case "radio":
+    case 'radio':
       return (
         <FieldWrapper onClick={select} isSelected={isSelected}>
           <h1>{field.radio.title}</h1>
@@ -321,7 +345,7 @@ const Field: React.FC<FieldProps> = ({ field, isSelected, select }) => {
             <Radio.Group>
               {field.radio.options.map((opt: any) => (
                 <Radio
-                  style={{ display: "block", lineHeight: "20pt" }}
+                  style={{ display: 'block', lineHeight: '20pt' }}
                   value={opt.value}
                 >
                   {opt.label}
@@ -331,18 +355,26 @@ const Field: React.FC<FieldProps> = ({ field, isSelected, select }) => {
           </fieldset>
         </FieldWrapper>
       );
-    case "rating":
+    case 'rating':
       return (
         <FieldWrapper onClick={select} isSelected={isSelected}>
           <h1>{field.rating.title}</h1>
           <Rate allowHalf={field.rating.allowHalfStar} defaultValue={2} />
         </FieldWrapper>
       );
-    case "link":
+    case 'date':
+      let picker = null;
+      if (field.date.type === 'date') {
+        picker = <DatePicker />;
+      } else if (field.date.type === 'range') {
+        picker = <DatePicker.RangePicker />;
+      } else if (field.date.type === 'month') {
+        picker = <DatePicker.MonthPicker />;
+      }
       return (
         <FieldWrapper onClick={select} isSelected={isSelected}>
-          <h1>{field.link.title}</h1>
-          <Input addonBefore="https://" />
+          <h1>{field.date.title}</h1>
+          {picker}
         </FieldWrapper>
       );
     default:
@@ -351,32 +383,33 @@ const Field: React.FC<FieldProps> = ({ field, isSelected, select }) => {
 };
 
 const FormBuilder: React.FC = () => {
-  const [fields, setFields] = React.useState<any[]>([
+  const [fields, setFields] = React.useState<FormField[]>([
     {
-      type: "question",
+      type: 'question',
       question: {
-        title: "Question",
-        description: "Description"
+        title: 'Question',
+        description: 'Description',
+        placeholder: 'Placeholder'
       }
     }
   ]);
   const [selectFieldIndex, setSelectedFieldIndex] = React.useState<number>(0);
 
   function onDragEnd(result: DropResult) {
-    console.log("Drag result -", result);
+    console.log('Drag result -', result);
     const { source, destination } = result;
 
     if (!destination) {
       return;
     }
-    if (source.droppableId === "Toolbar") {
+    if (source.droppableId === 'Toolbar') {
       const res = copy(toolbarItems, fields, source, destination);
-      console.log("New fields list", res);
+      console.log('New fields list', res);
       setFields(res);
       setSelectedFieldIndex(destination.index);
     } else if (source.droppableId === destination.droppableId) {
       const res = reorder(fields, source.index, destination.index);
-      console.log("Reordered fields list", res);
+      console.log('Reordered fields list', res);
       setFields(res);
     }
   }
@@ -387,15 +420,15 @@ const FormBuilder: React.FC = () => {
         <Toolbar>
           <Droppable droppableId="Toolbar" isDropDisabled>
             {(provided, snapshot) => (
-              <div ref={provided.innerRef} style={{ width: "100%" }}>
+              <div ref={provided.innerRef} style={{ flex: 1 }}>
                 <List
                   size="large"
                   header={<Typography.Title>Toolbox</Typography.Title>}
-                  style={{ width: "100%" }}
+                  style={{ flex: 1 }}
                   dataSource={toolbarItems}
                   renderItem={(item, index) =>
-                    item.value === "separator" ? (
-                      <Divider key={index} style={{ margin: "5px 0" }} />
+                    item.value === 'separator' ? (
+                      <Divider key={index} style={{ margin: '5px 0' }} />
                     ) : (
                       <Draggable
                         key={item.value}
@@ -411,11 +444,31 @@ const FormBuilder: React.FC = () => {
                                 style={provided.draggableProps.style}
                                 isDragging={snapshot.isDragging}
                               >
+                                <Icon
+                                  type={item.icon}
+                                  theme="outlined"
+                                  style={{
+                                    color: '#4C75EC',
+                                    fontSize: 20,
+                                    paddingRight: 5
+                                  }}
+                                />
                                 {item.label}
                               </ToolbarItem>
                             </div>
                             {snapshot.isDragging ? (
-                              <Clone isDragging={false}>{item.label}</Clone>
+                              <Clone isDragging={false}>
+                                <Icon
+                                  type={item.icon}
+                                  theme="outlined"
+                                  style={{
+                                    color: '#4C75EC',
+                                    fontSize: 20,
+                                    paddingRight: 5
+                                  }}
+                                />
+                                {item.label}
+                              </Clone>
                             ) : null}
                           </>
                         )}
@@ -433,9 +486,9 @@ const FormBuilder: React.FC = () => {
               <div
                 ref={provided.innerRef}
                 style={{
-                  width: "100%",
-                  height: "100%",
-                  padding: 20
+                  // width: '100%',
+                  // height: '100%',
+                  flex: 1
                 }}
               >
                 {fields.map((item, index) => (
@@ -470,7 +523,7 @@ const FormBuilder: React.FC = () => {
           field={fields[selectFieldIndex]}
           onEdit={(field: any) => {
             setFields(
-              fields.map((item, i) => {
+              fields.map((item: FormField, i: number) => {
                 if (selectFieldIndex === i) {
                   return field;
                 }

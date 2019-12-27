@@ -105,11 +105,9 @@ const toolbarItems = [
   { value: 'question', label: 'Paragraph text', icon: 'file-text' },
   { value: 'radio', label: 'Multi choice', icon: 'check-circle' },
   { value: 'number', label: 'Number field', icon: 'number' },
-  { value: 'separator', label: 'separator' },
   { value: 'rating', label: 'Rating scale', icon: 'star' },
   { value: 'file', label: 'File upload', icon: 'file' },
   { value: 'date', label: 'Date', icon: 'calendar' },
-  { value: 'separator', label: 'separator' },
   { value: 'phone', label: 'Phone number', icon: 'phone' },
   { value: 'email', label: 'Email address', icon: 'mail' },
   { value: 'link', label: 'Website', icon: 'link' },
@@ -165,8 +163,6 @@ const ToolbarItem = styled(List.Item)`
   width: 100%;
   padding: 0;
   transition: background 0.2s;
-  transform: ${(props: { isDragging: boolean }) =>
-    !props.isDragging ? 'none !important' : ''};
 
   && {
     display: flex;
@@ -426,56 +422,54 @@ const FormBuilder: React.FC = () => {
                   header={<Typography.Title>Toolbox</Typography.Title>}
                   style={{ flex: 1 }}
                   dataSource={toolbarItems}
-                  renderItem={(item, index) =>
-                    item.value === 'separator' ? (
-                      <Divider key={index} style={{ margin: '5px 0' }} />
-                    ) : (
-                      <Draggable
-                        key={item.value}
-                        draggableId={item.value}
-                        index={index}
-                      >
-                        {(provided, snapshot) => (
-                          <>
-                            <div ref={provided.innerRef as any}>
-                              <ToolbarItem
-                                {...provided.draggableProps}
-                                {...provided.dragHandleProps}
-                                style={provided.draggableProps.style}
-                                isDragging={snapshot.isDragging}
-                              >
-                                <Icon
-                                  type={item.icon}
-                                  theme="outlined"
-                                  style={{
-                                    color: '#4C75EC',
-                                    fontSize: 20,
-                                    paddingRight: 5
-                                  }}
-                                />
-                                {item.label}
-                              </ToolbarItem>
-                            </div>
-                            {snapshot.isDragging ? (
-                              <Clone isDragging={false}>
-                                <Icon
-                                  type={item.icon}
-                                  theme="outlined"
-                                  style={{
-                                    color: '#4C75EC',
-                                    fontSize: 20,
-                                    paddingRight: 5
-                                  }}
-                                />
-                                {item.label}
-                              </Clone>
-                            ) : null}
-                          </>
-                        )}
-                      </Draggable>
-                    )
-                  }
+                  renderItem={(item, index) => (
+                    <Draggable
+                      key={item.value}
+                      draggableId={item.value}
+                      index={index}
+                    >
+                      {(provided, snapshot) => (
+                        <>
+                          <div ref={provided.innerRef as any}>
+                            <ToolbarItem
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                              style={provided.draggableProps.style}
+                            >
+                              <Icon
+                                type={item.icon}
+                                theme="outlined"
+                                style={{
+                                  color: '#4C75EC',
+                                  fontSize: 20,
+                                  paddingRight: 5
+                                }}
+                              />
+                              {item.label}
+                            </ToolbarItem>
+                          </div>
+
+                          {snapshot.isDragging ? (
+                            <Clone className="react-beautiful-dnd-copy">
+                              <Icon
+                                type={item.icon}
+                                theme="outlined"
+                                style={{
+                                  color: '#4C75EC',
+                                  fontSize: 20,
+                                  paddingRight: 5
+                                }}
+                              />
+                              {item.label}
+                            </Clone>
+                          ) : null}
+                        </>
+                      )}
+                    </Draggable>
+                  )}
                 />
+
+                {provided.placeholder}
               </div>
             )}
           </Droppable>
@@ -512,6 +506,7 @@ const FormBuilder: React.FC = () => {
                     )}
                   </Draggable>
                 ))}
+                {provided.placeholder}
               </div>
             )}
           </Droppable>

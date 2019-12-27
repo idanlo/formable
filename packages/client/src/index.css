@@ -11,3 +11,11 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.react-beautiful-dnd-copy ~ div > li {
+  transform: none !important;
+}
+
+.react-beautiful-dnd-copy ~ div ~ [data-rbd-placeholder-context-id] {
+  display: none !important;
+}

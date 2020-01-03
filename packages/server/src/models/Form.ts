@@ -26,8 +26,27 @@ const fieldTypeRadioSchema = new mongoose.Schema(
   { _id: false }
 );
 
+const fieldTypeRatingSchema = new mongoose.Schema(
+  {
+    title: String,
+    allowHalfStar: { required: false, type: Boolean, default: true }
+  },
+  { _id: false }
+);
+
+const fieldTypeDateSchema = new mongoose.Schema(
+  {
+    title: String,
+    type: { required: false, type: String, default: 'date' }
+  },
+  { _id: false }
+);
+
 const fieldSchema = new mongoose.Schema(
-  { required: { required: false, type: Boolean, default: false } },
+  {
+    required: { required: false, type: Boolean, default: false },
+    id: { required: true, type: String }
+  },
   { discriminatorKey: 'type', _id: false }
 );
 
@@ -53,6 +72,22 @@ const formSchema = new mongoose.Schema(
   'radio',
   new mongoose.Schema(
     { radio: { required: true, type: fieldTypeRadioSchema } },
+    { _id: false }
+  )
+);
+
+(formSchema.path('fields') as any).discriminator(
+  'rating',
+  new mongoose.Schema(
+    { rating: { required: true, type: fieldTypeRatingSchema } },
+    { _id: false }
+  )
+);
+
+(formSchema.path('fields') as any).discriminator(
+  'date',
+  new mongoose.Schema(
+    { date: { required: true, type: fieldTypeDateSchema } },
     { _id: false }
   )
 );

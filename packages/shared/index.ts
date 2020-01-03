@@ -30,6 +30,7 @@ export interface User {
 }
 
 export type FieldTypeRadio = {
+  id: string;
   type: 'radio';
   radio: {
     title: string;
@@ -38,6 +39,7 @@ export type FieldTypeRadio = {
 };
 
 export type FieldTypeQuestion = {
+  id: string;
   type: 'question';
   question: {
     title: string;
@@ -47,6 +49,7 @@ export type FieldTypeQuestion = {
 };
 
 export type FieldTypeRating = {
+  id: string;
   type: 'rating';
   rating: {
     title: string;
@@ -55,6 +58,7 @@ export type FieldTypeRating = {
 };
 
 export type FieldTypeDate = {
+  id: string;
   type: 'date';
   date: {
     title: string;
@@ -67,6 +71,8 @@ export type FieldTypeQuestionAnswer = FieldTypeQuestion & {
     value: string;
   };
 };
+
+export type FormFieldTypes = 'question' | 'radio' | 'date' | 'rating';
 
 export type FormField =
   | FieldTypeRadio

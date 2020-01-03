@@ -3,23 +3,24 @@
   "version": "1.0.0",
   "proxy": "http://localhost:5000",
   "dependencies": {
-    "@types/jest": "24.0.21",
+    "@types/jest": "24.0.25",
     "@types/lodash.clonedeep": "^4.5.6",
-    "@types/node": "12.12.5",
-    "@types/react": "16.9.11",
-    "@types/react-dom": "16.9.3",
-    "antd": "^3.25.1",
+    "@types/node": "13.1.2",
+    "@types/react": "16.9.17",
+    "@types/react-dom": "16.9.4",
+    "antd": "^3.26.6",
     "axios": "^0.19.0",
-    "babel-plugin-import": "^1.12.2",
+    "babel-plugin-import": "^1.13.0",
     "customize-cra": "^0.8.0",
     "lodash.clonedeep": "^4.5.0",
-    "react": "^16.11.0",
+    "react": "^16.12.0",
     "react-app-rewired": "^2.1.5",
-    "react-beautiful-dnd": "^12.1.1",
-    "react-dom": "^16.11.0",
-    "react-scripts": "3.2.0",
+    "react-beautiful-dnd": "^12.2.0",
+    "react-dom": "^16.12.0",
+    "react-scripts": "3.3.0",
     "styled-components": "^4.4.1",
-    "typescript": "3.7.2"
+    "typescript": "3.7.4",
+    "uuid": "^3.3.3"
   },
   "scripts": {
     "start": "react-app-rewired start",
@@ -43,7 +44,8 @@
     ]
   },
   "devDependencies": {
-    "@types/react-beautiful-dnd": "^11.0.3",
-    "@types/styled-components": "^4.4.0"
+    "@types/react-beautiful-dnd": "^11.0.4",
+    "@types/styled-components": "^4.4.1",
+    "@types/uuid": "^3.4.6"
   }
 }
